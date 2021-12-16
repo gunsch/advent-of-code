@@ -8,38 +8,6 @@ import (
 	"os"
 )
 
-type point struct {
-	x     int
-	y     int
-	score int
-}
-
-var NO_POINT = point{
-	x:     -1,
-	y:     -1,
-	score: -1,
-}
-
-var SIZE = 100
-
-func printO(octopi [][]int) {
-	for _, y := range octopi {
-		for _, x := range y {
-			fmt.Printf(fmt.Sprintf("%d", x))
-		}
-		fmt.Println()
-	}
-}
-
-func printO2(octopi [][]int) {
-	for _, y := range octopi {
-		for _, x := range y {
-			fmt.Printf(fmt.Sprintf("%d ", x))
-		}
-		fmt.Println()
-	}
-}
-
 var hexMap = map[rune]byte{
 	'0': 0,
 	'1': 0x1,
@@ -68,20 +36,15 @@ var totalVersionScore = 0
 
 func main() {
 
-	// regex_insertion := regexp.MustCompile(`(?P<x1>[A-Z][A-Z]) -> (?P<x3>[A-Z])`)
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanRunes)
 
-	// D2FE28
-
-	// row := 0
 	reader := bitReader{
 		byteArr: []byte{},
 		bitPosition: 0,
 	}
 	for scanner.Scan() {
 		input := scanner.Text()
-		fmt.Println(input)
 		reader.byteArr = append(reader.byteArr, hexMap[[]rune(input)[0]])
 	}
 	fmt.Println(reader.byteArr)
@@ -123,7 +86,7 @@ func readPackets(reader *bitReader) (uint, uint) {
 		lengthTypeId := readBits(reader, 1)
 		if lengthTypeId == 0 {
 			totalLengthOfBits := readBits(reader, 15)
-			fmt.Printf("typeid=0, totalLengthOfBits=%d\n", totalLengthOfBits)
+			// fmt.Printf("typeid=0, totalLengthOfBits=%d\n", totalLengthOfBits)
 
 			subBitsRead := uint(0)
 			for subBitsRead < totalLengthOfBits {
@@ -133,7 +96,7 @@ func readPackets(reader *bitReader) (uint, uint) {
 			}
 		} else {
 			numberOfSubPackets := readBits(reader, 11)
-			fmt.Printf("typeid=1, numberOfSubPackets=%d\n", numberOfSubPackets)
+			// fmt.Printf("typeid=1, numberOfSubPackets=%d\n", numberOfSubPackets)
 			for i := 0; i < int(numberOfSubPackets); i++ {
 				_, subPacketValue := readPackets(reader)
 				subPacketValues = append(subPacketValues, subPacketValue)
